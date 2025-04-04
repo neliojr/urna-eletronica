@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import messagebox
+from tkinter import ttk
 
 from role import RoleManager
 
@@ -29,12 +30,16 @@ class RoleWindow:
         self.name = tk.Entry(self.root, width=30)
         self.name.pack(pady=5, anchor='w')
 
+        self.digits_options = ["2", "3", "4", "5"]
+
         tk.Label(self.root, text="Dígitos", font=("Arial", 10)).pack(anchor='w')
-        self.digits = tk.Entry(self.root, width=30)
+        self.digits = ttk.Combobox(self.root, values=self.digits_options, state="readonly")
         self.digits.pack(pady=5, anchor='w')
 
+        self.vice_options = ["Sim", "Não"]
+
         tk.Label(self.root, text="Tem vice?", font=("Arial", 10)).pack(anchor='w')
-        self.vice = tk.Entry(self.root, width=30)
+        self.vice = ttk.Combobox(self.root, values=self.vice_options, state="readonly")
         self.vice.pack(pady=5, anchor='w')
         
         frame_buttons = tk.Frame(self.root)

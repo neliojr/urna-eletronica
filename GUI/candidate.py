@@ -1,11 +1,14 @@
 import tkinter as tk
 from tkinter import messagebox
+from tkinter import ttk
 
 from candidate import CandidateManager
+from role import RoleManager
 
 class CandidateWindow:
     def __init__(self, root, action):
         self.candidate_manager = CandidateManager()
+        self.role_manager = RoleManager()
 
         self.root = root
         self.root.title("candidatoes")
@@ -21,6 +24,8 @@ class CandidateWindow:
             self.find_all()
 
     def create(self):
+        self.roles = self.role_manager.display()
+        
         # janela principal.
         tk.Label(self.root, text="Cadastrar candidato", font=("Arial", 14)).pack(pady=20, anchor='w')
 
@@ -33,8 +38,9 @@ class CandidateWindow:
         self.number = tk.Entry(self.root, width=30)
         self.number.pack(pady=5, anchor='w')
 
+        self.role_options = [role['name'] for role in self.roles]
         tk.Label(self.root, text="Cargo", font=("Arial", 10)).pack(anchor='w')
-        self.role = tk.Entry(self.root, width=30)
+        self.role = ttk.Combobox(self.root, values=self.role_options, state="readonly")
         self.role.pack(pady=5, anchor='w')
         
         frame_buttons = tk.Frame(self.root)
