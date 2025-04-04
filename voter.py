@@ -73,11 +73,14 @@ class VoterManager:
     
     # remover eleitor.
     def remove(self, voter_id):
-        self.voters = [
-            voter for voter in self.voters
-            if not (voter.voter_id == voter_id)
-        ]
-        self.save()
+        try:
+            self.voters = [
+                voter for voter in self.voters
+                if not (voter.voter_id == int(voter_id))
+            ]
+            self.save()
+        except:
+            return 'Invalid ID'
 
     # atualizar um eleitor.
     def update(self, voter_id, name, section):
