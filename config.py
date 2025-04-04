@@ -74,3 +74,7 @@ class ConfigManager:
             self.config['enable_gui'] = True
         
         self.save()
+
+    def find_update(self):
+        # implementar a lógica de verificação de atualizações.
+        return False

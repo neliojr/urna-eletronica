@@ -15,7 +15,8 @@ Qual opção você deseja navegar?
 [2] Candidatos
 [3] Eleitores
 [4] Iniciar votação
-[5] Mudar para GUI''')
+[5] Mudar para GUI
+[6] Procurar atualizações''')
 
             self.option = int(input('> '))
 
@@ -28,3 +29,12 @@ Qual opção você deseja navegar?
             elif self.option == 5:
                 self.config.change_ui()
                 exit()
+            elif self.option == 6:
+                self.config.find_update()
+                if self.config.find_update():
+                    print('Atualização encontrada!')
+                    print('Seu programa será atualizado!')
+                else:
+                    print('Seu programa já está atualizado!')
+                    input('Pressione Enter para continuar...')
+                    os.system('clear')

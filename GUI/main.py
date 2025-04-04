@@ -122,4 +122,7 @@ class Application:
 
     def update_program(self):
         # fecha a janela atual.
-        messagebox.showinfo("Atualizações", "Seu aplicativo já está atualizado.")
+        if self.config.find_update():
+            messagebox.showinfo("Atualizações", "Seu aplicativo será atualizado.")
+        else:
+            messagebox.showinfo("Atualizações", "Seu aplicativo já está atualizado.")
