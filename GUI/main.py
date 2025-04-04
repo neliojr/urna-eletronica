@@ -1,11 +1,15 @@
 import tkinter as tk
+from tkinter import messagebox
 
 from GUI.voter import VoterWindow
 from GUI.candidate import CandidateWindow
 from GUI.role import RoleWindow
+from config import ConfigManager
 
 class Application:
     def __init__(self, root):
+        self.config = ConfigManager()
+
         self.root = root
         self.root.title("Urna Eletrônica")
         self.root.geometry("600x400")
@@ -42,6 +46,16 @@ class Application:
         voter_menu.add_command(label="Remover", command=self.open_remove_voter_window)
         voter_menu.add_command(label="Buscar", command=self.open_find_voter_window)
         voter_menu.add_command(label="Listar")
+
+        # adiciona o menu "Configurações" à barra de menu.
+        config_menu = tk.Menu(menu_bar, tearoff=0)
+        menu_bar.add_cascade(label="Configurações", menu=config_menu, underline=1)
+
+        config_menu.add_command(label="Alterar número da seção")
+        config_menu.add_command(label="Alterar número de dígitos do eleitor")
+        config_menu.add_command(label="Alterar senha do administrador")
+        config_menu.add_command(label="Mudar para TUI", command=self.change_to_tui)
+        config_menu.add_command(label="Procurar atualizações", command=self.update_program)
 
         # janela principal.
         tk.Label(self.root, text="Clique no botão para iniciar a eleição", font=("Arial", 14)).pack(pady=20)
@@ -99,3 +113,13 @@ class Application:
         # abre a janela de cadastro de eleitores.
         role_window = tk.Toplevel(self.root)
         RoleWindow(role_window, 'find')
+    
+    def change_to_tui(self):
+        # fecha a janela atual.
+        self.config.change_ui()
+        messagebox.showinfo("Configurações", "Inicie o aplicativo novamente para aplicar as mudanças.")
+        self.root.destroy()
+
+    def update_program(self):
+        # fecha a janela atual.
+        messagebox.showinfo("Atualizações", "Seu aplicativo já está atualizado.")

@@ -50,3 +50,27 @@ class ConfigManager:
                 'voter_number_digit_length': config.voter_number_digit_length
             }
         return None
+    
+    def save(self):
+        data = {
+            "config": [
+                {
+                    "section": self.config['section'],
+                    "enable_gui": self.config['enable_gui'],
+                    "admin_pass": self.config['admin_pass'],
+                    "voter_number_digit_length": self.config['voter_number_digit_length']
+                }
+            ]
+        }
+
+        with open(self.database, 'w') as file:
+            json.dump(data, file, indent=4)
+    
+    def change_ui(self):
+        self.config = self.get()
+        if self.config['enable_gui']:
+            self.config['enable_gui'] = False
+        else:
+            self.config['enable_gui'] = True
+        
+        self.save()
