@@ -104,7 +104,7 @@ class VoterWindow:
             f"Nome: {self.voter['name']}\n"
             f"ID do eleitor: {self.voter['voter_id']}\n"
             f"Data de nascimento: {self.voter['date_of_birth']}\n"
-            f"Seção: {self.voter['section']}\n"
+            f"Seção: {self.voter['section']}"
         )
         self.root.destroy()
 

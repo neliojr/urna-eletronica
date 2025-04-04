@@ -1,6 +1,7 @@
 import tkinter as tk
 
 from GUI.voter import VoterWindow
+from GUI.candidate import CandidateWindow
 
 class Application:
     def __init__(self, root):
@@ -27,9 +28,9 @@ class Application:
         candidate_menu = tk.Menu(menu_bar, tearoff=0)
         menu_bar.add_cascade(label="Candidatos", menu=candidate_menu, underline=1)
 
-        candidate_menu.add_command(label="Novo")
-        candidate_menu.add_command(label="Remover")
-        candidate_menu.add_command(label="Buscar")
+        candidate_menu.add_command(label="Novo", command=self.open_create_candidate_window)
+        candidate_menu.add_command(label="Remover", command=self.open_remove_candidate_window)
+        candidate_menu.add_command(label="Buscar", command=self.open_find_candidate_window)
         candidate_menu.add_command(label="Listar")
 
         # adiciona o menu "Eleitores" à barra de menu.
@@ -67,3 +68,18 @@ class Application:
         # abre a janela de cadastro de eleitores.
         voter_window = tk.Toplevel(self.root)
         VoterWindow(voter_window, 'find')
+
+    def open_create_candidate_window(self):
+        # abre a janela de cadastro de eleitores.
+        candidate_window = tk.Toplevel(self.root)
+        CandidateWindow(candidate_window, 'create')
+
+    def open_remove_candidate_window(self):
+        # abre a janela de cadastro de eleitores.
+        candidate_window = tk.Toplevel(self.root)
+        CandidateWindow(candidate_window, 'remove')
+
+    def open_find_candidate_window(self):
+        # abre a janela de cadastro de eleitores.
+        candidate_window = tk.Toplevel(self.root)
+        CandidateWindow(candidate_window, 'find')
