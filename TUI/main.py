@@ -32,9 +32,12 @@ Qual opção você deseja navegar?
             elif self.option == 6:
                 self.config.find_update()
                 if self.config.find_update():
+                    os.system('clear')
                     print('Atualização encontrada!')
-                    print('Seu programa será atualizado!')
+                    print('Seu programa será atualizado.')
+                    input('Pressione Enter para continuar...')
                 else:
+                    os.system('clear')
                     print('Seu programa já está atualizado!')
                     input('Pressione Enter para continuar...')
                     os.system('clear')
