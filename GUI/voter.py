@@ -99,6 +99,11 @@ class VoterWindow:
 
     def find_voter_button(self):
         self.voter = self.voter_manager.find(self.voter_id.get())
+
+        if self.voter is None:
+            messagebox.showerror("Erro", "Eleitor não encontrado.")
+            return
+        
         messagebox.showinfo(
             "Dados do eleitor",
             f"Nome: {self.voter['name']}\n"

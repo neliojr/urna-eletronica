@@ -107,7 +107,11 @@ class CandidateWindow:
 
     def find_candidate_button(self):
         self.candidate = self.candidate_manager.find(self.role.get(), self.number.get())
-        input
+        
+        if self.candidate is None:
+            messagebox.showerror("Erro", "Candidato não encontrado.")
+            return
+        
         messagebox.showinfo(
             "Dados do candidato",
             f"Nome: {self.candidate['name']}\n"

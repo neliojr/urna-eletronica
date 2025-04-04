@@ -56,16 +56,19 @@ class RoleManager:
     
     # criar cargo.
     def create(self, name, digits, vice):
-        if digits > 5 or digits < 2:
-            return 'digitos insuficientes'
-        
-        for role in self.roles:
-            if role.name == name:
-                return 'role already registered'
+        try:
+            if int(digits) > 5 or int(digits) < 2:
+                return 'digitos insuficientes'
             
-        new_role = Role(name, digits, vice)
-        self.roles.append(new_role)
-        self.save()
+            for role in self.roles:
+                if role.name == name:
+                    return 'role already registered'
+                
+            new_role = Role(name, int(digits), vice)
+            self.roles.append(new_role)
+            self.save()
+        except ValueError:
+            return 'Invalid digits.'
     
     # remover cargo.
     def remove(self, name):

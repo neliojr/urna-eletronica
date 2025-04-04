@@ -2,6 +2,7 @@ import tkinter as tk
 
 from GUI.voter import VoterWindow
 from GUI.candidate import CandidateWindow
+from GUI.role import RoleWindow
 
 class Application:
     def __init__(self, root):
@@ -19,9 +20,9 @@ class Application:
         role_menu = tk.Menu(menu_bar, tearoff=0)
         menu_bar.add_cascade(label="Cargos", menu=role_menu, underline=0)
 
-        role_menu.add_command(label="Novo")
-        role_menu.add_command(label="Remover")
-        role_menu.add_command(label="Buscar")
+        role_menu.add_command(label="Novo", command=self.open_create_role_window)
+        role_menu.add_command(label="Remover", command=self.open_remove_role_window)
+        role_menu.add_command(label="Buscar", command=self.open_find_role_window)
         role_menu.add_command(label="Listar")
 
         # adiciona o menu "Candidatos" à barra de menu.
@@ -83,3 +84,18 @@ class Application:
         # abre a janela de cadastro de eleitores.
         candidate_window = tk.Toplevel(self.root)
         CandidateWindow(candidate_window, 'find')
+
+    def open_create_role_window(self):
+        # abre a janela de cadastro de eleitores.
+        role_window = tk.Toplevel(self.root)
+        RoleWindow(role_window, 'create')
+
+    def open_remove_role_window(self):
+        # abre a janela de cadastro de eleitores.
+        role_window = tk.Toplevel(self.root)
+        RoleWindow(role_window, 'remove')
+
+    def open_find_role_window(self):
+        # abre a janela de cadastro de eleitores.
+        role_window = tk.Toplevel(self.root)
+        RoleWindow(role_window, 'find')

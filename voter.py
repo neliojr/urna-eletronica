@@ -107,7 +107,7 @@ class VoterManager:
                     }
             return None
         except:
-            return 'Invalid voter ID'
+            return None
 
     
     def generate_id(self):
