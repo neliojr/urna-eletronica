@@ -38,7 +38,7 @@ class Application:
 
         voter_menu.add_command(label="Novo", command=self.open_create_voter_window)
         voter_menu.add_command(label="Remover", command=self.open_remove_voter_window)
-        voter_menu.add_command(label="Buscar")
+        voter_menu.add_command(label="Buscar", command=self.open_find_voter_window)
         voter_menu.add_command(label="Listar")
 
         # janela principal.
@@ -62,3 +62,8 @@ class Application:
         # abre a janela de cadastro de eleitores.
         voter_window = tk.Toplevel(self.root)
         VoterWindow(voter_window, 'remove')
+
+    def open_find_voter_window(self):
+        # abre a janela de cadastro de eleitores.
+        voter_window = tk.Toplevel(self.root)
+        VoterWindow(voter_window, 'find')

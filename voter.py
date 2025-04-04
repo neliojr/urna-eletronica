@@ -26,7 +26,7 @@ class VoterManager:
                 data = json.load(file)
 
                 for item in data['voters']:
-                    voter = Voter(item['voter_id'], item['name'], item["section"], item["voted"], item["date_of_birth"])
+                    voter = Voter(item['voter_id'], item['name'], item['date_of_birth'], item['section'], item['voted'])
                     self.voters.append(voter)
         except: # criando arquio JSON caso não exista.
             data = {
@@ -80,7 +80,7 @@ class VoterManager:
             ]
             self.save()
         except:
-            return 'Invalid ID'
+            return 'Invalid voter ID'
 
     # atualizar um eleitor.
     def update(self, voter_id, name, section):
@@ -95,16 +95,20 @@ class VoterManager:
     
     # buscar um eleitor.
     def find(self, voter_id):
-        for voter in self.voters:
-            if voter.voter_id == voter_id:
-                return {
-                    'voter_id': voter.voter_id,
-                    'name': voter.name,
-                    'date_of_birth': voter.date_of_birth,
-                    'section': voter.section,
-                    'voted': voter.voted
-                }
-        return None
+        try:
+            for voter in self.voters:
+                if voter.voter_id == int(voter_id):
+                    return {
+                        'voter_id': voter.voter_id,
+                        'name': voter.name,
+                        'date_of_birth': voter.date_of_birth,
+                        'section': voter.section,
+                        'voted': voter.voted
+                    }
+            return None
+        except:
+            return 'Invalid voter ID'
+
     
     def generate_id(self):
         while True:
