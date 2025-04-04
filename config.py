@@ -30,7 +30,7 @@ class ConfigManager:
                 "config": [
                     {
                         "section": 1,
-                        "enable_gui": False,
+                        "enable_gui": True,
                         "admin_pass": "1234",
                         "voter_number_digit_length": 6
                     }

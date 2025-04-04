@@ -1,5 +1,7 @@
 import tkinter as tk
 
+from GUI.voter import VoterWindow
+
 class Application:
     def __init__(self, root):
         self.root = root
@@ -34,7 +36,7 @@ class Application:
         voter_menu = tk.Menu(menu_bar, tearoff=0)
         menu_bar.add_cascade(label="Eleitores", menu=voter_menu, underline=0)
 
-        voter_menu.add_command(label="Novo")
+        voter_menu.add_command(label="Novo", command=self.open_create_voter_window)
         voter_menu.add_command(label="Remover")
         voter_menu.add_command(label="Buscar")
         voter_menu.add_command(label="Listar")
@@ -50,3 +52,8 @@ class Application:
 
     def start_election(self):
         input("clicou")
+
+    def open_create_voter_window(self):
+        # abre a janela de cadastro de eleitores.
+        voter_window = tk.Toplevel(self.root)
+        VoterWindow(voter_window, 'create')

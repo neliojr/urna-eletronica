@@ -106,7 +106,6 @@ class VoterManager:
     def generate_id(self):
         while True:
             voter_number_digit_length = 10 ** config.get()['voter_number_digit_length'] - 1
-            input(voter_number_digit_length)
             voter_id = random.randint(1, voter_number_digit_length)
             check_exists = self.find(voter_id)
             if check_exists == None:
