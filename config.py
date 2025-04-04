@@ -10,6 +10,7 @@ class Config:
 
 class ConfigManager:
     def __init__(self):
+        self.version = '1.0'
         self.config = []
         self.database = './data/config.json'
         self.load()
@@ -24,7 +25,7 @@ class ConfigManager:
                     config = Config(item['section'], item['enable_gui'], item['admin_pass'], item['voter_number_digit_length'])
                     self.config.append(config)
         except: # criando arquivo JSON caso não exista.
-            if not os.path.exists(self.database):
+            if not os.path.exists('./data'):
                 os.mkdir('./data')
             data = {
                 "config": [
@@ -78,3 +79,21 @@ class ConfigManager:
     def find_update(self):
         # implementar a lógica de verificação de atualizações.
         return False
+
+    def delete_all_data(self):
+        try:
+            os.remove('./data/candidates.json')
+        except:
+            pass
+        try:
+            os.remove('./data/config.json')
+        except:
+            pass
+        try:
+            os.remove('./data/roles.json')
+        except:
+            pass
+        try:
+            os.remove('./data/voters.json')
+        except:
+            pass

@@ -56,6 +56,7 @@ class Application:
         config_menu.add_command(label="Alterar senha do administrador")
         config_menu.add_command(label="Mudar para TUI", command=self.change_to_tui)
         config_menu.add_command(label="Procurar atualizações", command=self.update_program)
+        config_menu.add_command(label="Apagar todos os dados", command=self.delete_all_data)
 
         # janela principal.
         tk.Label(self.root, text="Clique no botão para iniciar a eleição", font=("Arial", 14)).pack(pady=20)
@@ -126,3 +127,12 @@ class Application:
             messagebox.showinfo("Atualizações", "Seu aplicativo será atualizado.")
         else:
             messagebox.showinfo("Atualizações", "Seu aplicativo já está atualizado.")
+
+    def delete_all_data(self):
+        self.config.delete_all_data()
+        messagebox.showinfo(
+            "Configurações", 
+            "Todos os dados foram apagados.\n"
+            "Inicie o aplicativo novamente para aplicar as mudanças."
+        )
+        self.root.destroy()

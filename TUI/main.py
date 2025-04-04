@@ -16,7 +16,8 @@ Qual opção você deseja navegar?
 [3] Eleitores
 [4] Iniciar votação
 [5] Mudar para GUI
-[6] Procurar atualizações''')
+[6] Procurar atualizações
+[7] Apagar todos os dados''')
 
             self.option = int(input('> '))
 
@@ -40,4 +41,19 @@ Qual opção você deseja navegar?
                     os.system('clear')
                     print('Seu programa já está atualizado!')
                     input('Pressione Enter para continuar...')
+                    os.system('clear')
+            elif self.option == 7:
+                os.system('clear')
+                print('Você tem certeza que deseja apagar todos os dados?')
+                print('[1] Sim')
+                print('[2] Não')
+                option = int(input('> '))
+                if option == 1:
+                    self.config.delete_all_data()
+                    os.system('clear')
+                    print('Todos os dados foram apagados!')
+                    print('Inicie o programa novamente para aplicar as mudanças.')
+                    input('Pressione Enter para continuar...')
+                    exit()
+                else:
                     os.system('clear')
