@@ -3,7 +3,7 @@ from TUI.candidate import Candidate
 from TUI.role import Role
 from TUI.voter import Voter
 
-class TUI:
+class Application:
     def menu(self):
         while True:
             os.system('clear')
