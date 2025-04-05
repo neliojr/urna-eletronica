@@ -1,5 +1,7 @@
+import datetime
 import tkinter as tk
 from tkinter import messagebox
+from tkcalendar import DateEntry
 
 from voter import VoterManager
 
@@ -29,9 +31,17 @@ class VoterWindow:
         self.name = tk.Entry(self.root, width=30)
         self.name.pack(pady=5, anchor='w')
 
-        tk.Label(self.root, text="Data de nascimento (DD/MM/AAAA)", font=("Arial", 10)).pack(anchor='w')
-        self.date_of_birth = tk.Entry(self.root, width=30)
-        self.date_of_birth.pack(pady=5, anchor='w')
+        tk.Label(self.root, text="Data de nascimento", font=("Arial", 10)).pack(anchor='w')
+        self.date_of_birth = tk.StringVar()
+
+        self.calendar = DateEntry(
+            self.root,
+            date_pattern='dd/mm/yyyy',
+            locale='pt_BR',
+            textvariable=self.date_of_birth,
+            maxdate=datetime.date.today()
+        )
+        self.calendar.pack(pady=5)
 
         tk.Label(self.root, text="Seção", font=("Arial", 10)).pack(anchor='w')
         self.section = tk.Entry(self.root, width=30)
