@@ -26,7 +26,13 @@ class VoterManager:
                 data = json.load(file)
 
                 for item in data['voters']:
-                    voter = Voter(item['voter_id'], item['name'], item['date_of_birth'], item['section'], item['voted'])
+                    voter = Voter(
+                        item['voter_id'],
+                        item['name'],
+                        item['date_of_birth'],
+                        item['section'],
+                        item['voted']
+                    )
                     self.voters.append(voter)
         except: # criando arquio JSON caso não exista.
             data = {
@@ -67,7 +73,13 @@ class VoterManager:
     
     # criar eleitor.
     def create(self, name, date_of_birth, section):
-        new_voter = Voter(self.generate_id(), name, date_of_birth, section, False)
+        new_voter = Voter(
+            self.generate_id(),
+            name,
+            date_of_birth,
+            section,
+            False
+        )
         self.voters.append(new_voter)
         self.save()
     
@@ -113,7 +125,10 @@ class VoterManager:
     def generate_id(self):
         while True:
             voter_number_digit_length = 10 ** config.get()['voter_number_digit_length'] - 1
-            voter_id = random.randint(1, voter_number_digit_length)
+            voter_id = random.randint(
+                1,
+                voter_number_digit_length
+            )
             check_exists = self.find(voter_id)
             if check_exists == None:
                 break

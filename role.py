@@ -19,7 +19,11 @@ class RoleManager:
                 data = json.load(file)
 
                 for item in data['roles']:
-                    role = Role(item['name'], item['digits'], item["vice"])
+                    role = Role(
+                        item['name'],
+                        item['digits'],
+                        item["vice"]
+                    )
                     self.roles.append(role)
         except: # criando arquio JSON caso não exista.
             data = {
@@ -64,7 +68,11 @@ class RoleManager:
                 if role.name == name:
                     return 'role already registered'
                 
-            new_role = Role(name, int(digits), vice)
+            new_role = Role(
+                name,
+                int(digits),
+                vice
+            )
             self.roles.append(new_role)
             self.save()
         except ValueError:

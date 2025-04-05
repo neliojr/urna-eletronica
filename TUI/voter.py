@@ -43,19 +43,27 @@ Qual opção você deseja navegar?
         self.date_of_birth = input('Data de nascimento (DD/MM/YYYY): ')
         self.section = int(input('Seção: '))
 
-        voter_manager.create(self.name, self.date_of_birth, self.section)
+        voter_manager.create(
+            self.name,
+            self.date_of_birth,
+            self.section
+        )
 
     def remove(self):
         print('Remover eleitor')
         self.voter_id = int(input('Número do eleitor: '))
 
-        voter_manager.remove(self.voter_id)
+        voter_manager.remove(
+            self.voter_id
+        )
     
     def find(self):
         print('Buscar eleitor')
         self.voter_id = int(input('Número do eleitor: '))
 
-        voter = voter_manager.find(self.voter_id)
+        voter = voter_manager.find(
+            self.voter_id
+        )
 
         input(voter)
     
@@ -63,7 +71,9 @@ Qual opção você deseja navegar?
         print('Buscar cargo')
         self.name = input('Cargo: ')
 
-        roles = voter_manager.find(self.name)
+        roles = voter_manager.find(
+            self.name
+        )
 
         input(roles)
 

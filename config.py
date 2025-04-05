@@ -22,7 +22,12 @@ class ConfigManager:
                 data = json.load(file)
 
                 for item in data['config']:
-                    config = Config(item['section'], item['enable_gui'], item['admin_pass'], item['voter_number_digit_length'])
+                    config = Config(
+                        item['section'],
+                        item['enable_gui'],
+                        item['admin_pass'],
+                        item['voter_number_digit_length']
+                    )
                     self.config.append(config)
         except: # criando arquivo JSON caso não exista.
             if not os.path.exists('./data'):

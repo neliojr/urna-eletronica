@@ -20,7 +20,12 @@ class CandidateManager:
                 data = json.load(file)
 
                 for item in data['candidates']:
-                    candidate = Candidate(item['name'], item['number'], item["role"], item["votes"])
+                    candidate = Candidate(
+                        item['name'],
+                        item['number'],
+                        item["role"],
+                        item["votes"]
+                    )
                     self.candidates.append(candidate)
         except: # criando arquio JSON caso não exista.
             data = {
@@ -63,7 +68,12 @@ class CandidateManager:
             if candidate.role == role and candidate.number == number:
                 return 'candidate already registered'
             
-        new_candidate = Candidate(name, number, role, 0)
+        new_candidate = Candidate(
+            name,
+            number,
+            role,
+            0
+        )
         self.candidates.append(new_candidate)
         self.save()
     

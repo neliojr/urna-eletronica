@@ -43,19 +43,27 @@ Qual opção você deseja navegar?
         else:
             self.vice = False
 
-        role_manager.create(self.name, self.digits, self.vice)
+        role_manager.create(
+            self.name,
+            self.digits,
+            self.vice
+        )
 
     def remove(self):
         print('Remover cargo')
         self.name = input('Cargo: ')
 
-        role_manager.remove(self.name)
+        role_manager.remove(
+            self.name
+        )
     
     def find(self):
         print('Buscar cargo')
         self.name = input('Cargo: ')
 
-        roles = role_manager.find(self.name)
+        roles = role_manager.find(
+            self.name
+        )
 
         input(roles)
 

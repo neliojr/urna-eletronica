@@ -39,21 +39,31 @@ Qual opção você deseja navegar?
         self.number = int(input('Número: '))
         self.role = input('Cargo: ')
 
-        candidate_manager.create(self.name, self.number, self.role)
+        candidate_manager.create(
+            self.name,
+            self.number,
+            self.role
+        )
 
     def remove(self):
         print('Remover candidato')
         self.role = input('Cargo: ')
         self.number = int(input('Número: '))
 
-        candidate_manager.remove(self.role, self.number)
+        candidate_manager.remove(
+            self.role,
+            self.number
+        )
     
     def find(self):
         print('Buscar candidato')
         self.role = input('Cargo: ')
         self.number = int(input('Número: '))
 
-        candidates = candidate_manager.find(self.role, self.number)
+        candidates = candidate_manager.find(
+            self.role,
+            self.number
+        )
 
         input(candidates)
 
