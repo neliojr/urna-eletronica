@@ -58,6 +58,10 @@ class RoleManager:
             for role in self.roles
         ]
     
+    # contar cargos.
+    def count(self):
+        return len(self.roles)
+    
     # criar cargo.
     def create(self, name, digits, vice):
         try:

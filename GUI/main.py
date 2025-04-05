@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox
 
+from GUI.election import ElectionWindow
 from GUI.voter import VoterWindow
 from GUI.candidate import CandidateWindow
 from GUI.role import RoleWindow
@@ -148,7 +149,10 @@ class Application:
         ).pack(side=tk.LEFT, padx=10)
 
     def start_election(self):
-        input("clicou")
+        self.root.destroy()
+        election_window = tk.Tk()
+        ElectionWindow(election_window)
+        election_window.mainloop()
 
     def open_create_voter_window(self):
         # abre a janela de cadastro de eleitores.

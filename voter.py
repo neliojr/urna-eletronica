@@ -137,8 +137,19 @@ class VoterManager:
     
     def voter_voted(self, voter_id):
         for voter in self.voters:
-            if voter.voter_id == voter_id:
+            if voter.voter_id == int(voter_id):
                 if voter.voted:
                     return 'eleitor já votou.'
                 voter.voted = True
                 self.save()
+    
+    def validate(self, voter_id):
+        try:
+            for voter in self.voters:
+                if voter.voter_id == int(voter_id):
+                    if not voter.voted:
+                        return True
+                    else:
+                        return False
+        except:
+            return False
