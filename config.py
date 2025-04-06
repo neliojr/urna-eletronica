@@ -32,6 +32,8 @@ class ConfigManager:
         except: # criando arquivo JSON caso não exista.
             if not os.path.exists('./data'):
                 os.mkdir('./data')
+            if not os.path.exists('./data/images'):
+                os.mkdir('./data/images')
             data = {
                 "config": [
                     {

@@ -173,5 +173,9 @@ cython_debug/
 # PyPI configuration file
 .pypirc
 
-data/
+data/images/
+data/candidates.json
+data/config.json
+data/roles.json
+data/voters.json
 output/
