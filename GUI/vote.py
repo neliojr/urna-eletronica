@@ -20,6 +20,9 @@ class VoteWindow:
         
         self.current_round = 0
         self.total_rounds = self.role_manager.count() - 1
+
+        self.blink_id = None  # variável para armazenar o ID da animação de piscar caixa de número.
+        self.blink_state = False  # estado do piscar (True/False).
         
         # inicia o primeiro voto.
         self.start_vote_for_current_round()
@@ -50,14 +53,14 @@ class VoteWindow:
         tk.Label(
             self.root,
             text="Seu voto para",
-            font=("Arial", 14)
-        ).pack(pady=10, anchor='w')
+            font=("Arial", 28)
+        ).pack(anchor='w', pady=10)
 
         tk.Label(
             self.root,
             text=self.current_role['name'],
-            font=("Arial", 20)
-        ).pack(padx=75, anchor='w')
+            font=("Arial", 40, "bold")
+        ).pack()
 
         # exibindo a imagem.
         #self.label_image = tk.Label(self.root, image=self.image)
@@ -65,7 +68,15 @@ class VoteWindow:
 
         # container para os dígitos.
         self.digits_container = tk.Frame(self.root)
-        self.digits_container.pack(anchor='w', pady=20)
+        self.digits_container.pack(anchor='w', pady=(200,0))
+
+        self.label_number_text = tk.Label(
+            self.digits_container,
+            text='Número: ',
+            font=("Arial", 28),
+            fg= '#d9d9d9'
+        )
+        self.label_number_text.pack(padx=(0,50), side=tk.LEFT)
         
         # criando os quadrados dos dígitos.
         self.digit_frames = []
@@ -79,18 +90,17 @@ class VoteWindow:
                 highlightbackground="black",
                 highlightthickness=2,
                 highlightcolor="black",
-                bg="white"
+                bg="#d9d9d9"
             )
             frame.pack_propagate(False)
-            frame.pack(anchor='w', side=tk.LEFT, padx=5)
+            frame.pack(anchor='w', side=tk.LEFT)
             self.digit_frames.append(frame)
             
             # label que mostra o dígito.
             label = tk.Label(
                 frame,
                 text="",
-                font=("Arial", 36),
-                bg="white"
+                font=("Arial", 36)
             )
             label.pack(anchor='w', expand=True)
             self.digit_labels.append(label)
@@ -99,7 +109,7 @@ class VoteWindow:
         self.label_name = tk.Label(
             self.root,
             text="",
-            font=("Arial", 20)
+            font=("Arial", 28)
         )
         self.label_name.pack(anchor='w', pady=20)
 
@@ -107,16 +117,38 @@ class VoteWindow:
         self.highlight_current_digit()
 
     def highlight_current_digit(self):
+        # Cancela qualquer animação de piscar existente
+        if self.blink_id:
+            self.root.after_cancel(self.blink_id)
+            self.blink_id = None
+        
         # remove destaque de todos os dígitos.
         for frame in self.digit_frames:
             frame.config(highlightbackground="black", highlightthickness=2)
         
         # destaca o dígito atual (se houver espaço).
         if len(self.number) < len(self.digit_frames):
-            self.digit_frames[len(self.number)].config(
-                highlightbackground="#0066cc",
-                highlightthickness=3
-            )
+            current_frame = self.digit_frames[len(self.number)]
+            
+            # Função para alternar o estado do piscar
+            def blink():
+                self.blink_state = not self.blink_state
+                if self.blink_state:
+                    current_frame.config(
+                        highlightbackground="#d9d9d9",
+                        highlightthickness=2,
+                        bg="#d9d9d9"
+                    )
+                else:
+                    current_frame.config(
+                        highlightbackground="black",
+                        highlightthickness=2
+                    )
+                # Agenda o próximo piscar
+                self.blink_id = self.root.after(500, blink)  # 500ms = 0.5s
+            
+            # Inicia a animação
+            blink()
 
     def read_keyboard(self, event):
         if len(self.number) < self.current_role['digits']:
@@ -140,6 +172,12 @@ class VoteWindow:
         
         elif event.keysym == 'BackSpace':
             self.number = ''
+            # oculta o label "Número"
+            self.label_number_text.config(
+                    fg="#d9d9d9"
+            )
+
+            # remove o label "Nome"
             self.label_name.config(
                     text=""
             )
@@ -183,6 +221,11 @@ class VoteWindow:
                 #self.image = Image.open("./data/foto2.png")
                 #self.image = ImageTk.PhotoImage(self.image)
             
+            # mostra o label "Número"
+            self.label_number_text.config(
+                    fg="black"
+            )
+            
             #self.label_image.config(image=self.image)
             
             # adiciona a mensagem de confirmação.
@@ -208,13 +251,13 @@ class VoteWindow:
             
             if self.current_round <= self.total_rounds:
                 pygame.mixer.init()
-                pygame.mixer.Sound("./data/sounds/voto_confirmado.wav").play()
+                pygame.mixer.Sound("./data/sounds/confirmed_vote.wav").play()
                 self.start_vote_for_current_round()
             else:
                 self.voted = True
                 # tocar som de finalização.
                 pygame.mixer.init()
-                pygame.mixer.Sound("./data/sounds/fim.wav").play()
+                pygame.mixer.Sound("./data/sounds/end.wav").play()
                 
                 # Limpa a tela
                 for widget in self.root.winfo_children():
@@ -224,7 +267,7 @@ class VoteWindow:
                 tk.Label(
                     self.root,
                     text="FIM",
-                    font=("Arial", 200, "bold")
+                    font=("Arial", 200)
                 ).place(relx=0.5, rely=0.4, anchor=tk.CENTER)
             
                 # label "VOTOU" no canto inferior direito.
