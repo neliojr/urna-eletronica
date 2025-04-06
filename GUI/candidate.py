@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import messagebox
+from tkinter import filedialog
 from tkinter import ttk
 
 from candidate import CandidateManager
@@ -11,7 +12,7 @@ class CandidateWindow:
         self.role_manager = RoleManager()
 
         self.root = root
-        self.root.title("candidatoes")
+        self.root.title("Candidatos")
 
         # seleciona a janela que será aberta.
         if action == 'create':
@@ -27,20 +28,23 @@ class CandidateWindow:
         self.roles = self.role_manager.display()
         
         # janela principal.
+        self.content = tk.Frame(self.root)
+        self.content.pack()
+
         tk.Label(
-            self.root,
+            self.content,
             text="Cadastrar candidato",
             font=("Arial", 14)
         ).pack(pady=20, anchor='w')
 
         # frame para os campos de entrada.
         tk.Label(
-            self.root,
+            self.content,
             text="Nome",
             font=("Arial", 10)
         ).pack(anchor='w')
         self.name = tk.Entry(
-            self.root,
+            self.content,
             width=30
         )
         self.name.pack(
@@ -49,12 +53,12 @@ class CandidateWindow:
         )
 
         tk.Label(
-            self.root,
+            self.content,
             text="Número",
             font=("Arial", 10)
         ).pack(anchor='w')
         self.number = tk.Entry(
-            self.root,
+            self.content,
             width=30
         )
         self.number.pack(
@@ -64,12 +68,12 @@ class CandidateWindow:
 
         self.role_options = [role['name'] for role in self.roles]
         tk.Label(
-            self.root,
+            self.content,
             text="Cargo",
             font=("Arial", 10)
         ).pack(anchor='w')
         self.role = ttk.Combobox(
-            self.root,
+            self.content,
             values=self.role_options,
             state="readonly"
         )
@@ -77,7 +81,60 @@ class CandidateWindow:
             pady=5,
             anchor='w'
         )
-        
+
+        self.role.bind("<<ComboboxSelected>>", self.toggle_vice_fields)
+
+        tk.Label(
+            self.content,
+            text="Foto",
+            font=("Arial", 10)
+        ).pack(anchor='w')
+
+        self.frame_photo = tk.Frame(self.content)
+        self.frame_photo.pack(anchor='w')
+
+        self.photo = tk.Entry(
+            self.frame_photo,
+            width=25
+        )
+        self.photo.pack(side=tk.LEFT, pady=5)
+
+        tk.Button(
+            self.frame_photo,
+            text="Selecionar",
+            command=self.select_photo
+        ).pack(side=tk.LEFT, padx=5)
+
+        self.vice_label = tk.Label(
+            self.content,
+            text="Nome do vice",
+            font=("Arial", 10)
+        )
+        self.vice = tk.Entry(
+            self.content,
+            width=30
+        )
+
+        self.vice_photo_label = tk.Label(
+            self.content,
+            text="Foto do vice",
+            font=("Arial", 10)
+        )
+
+        self.frame_vice_photo = tk.Frame(self.content)
+
+        self.vice_photo = tk.Entry(
+            self.frame_vice_photo,
+            width=25
+        )
+        self.vice_photo.pack(side=tk.LEFT, pady=5)
+
+        tk.Button(
+            self.frame_vice_photo,
+            text="Selecionar",
+            command=self.select_vice_photo
+        ).pack(side=tk.LEFT, padx=5)
+
         frame_buttons = tk.Frame(self.root)
         frame_buttons.pack()
 
@@ -94,6 +151,7 @@ class CandidateWindow:
         ).pack(side=tk.RIGHT, anchor='w')
     
     def remove(self):
+        self.roles = self.role_manager.display()
         # janela principal.
         tk.Label(
             self.root,
@@ -102,14 +160,16 @@ class CandidateWindow:
         ).pack(pady=20)
 
         # frame para os campos de entrada.
+        self.role_options = [role['name'] for role in self.roles]
         tk.Label(
             self.root,
             text="Cargo",
             font=("Arial", 10)
         ).pack(anchor='w')
-        self.role = tk.Entry(
+        self.role = ttk.Combobox(
             self.root,
-            width=30
+            values=self.role_options,
+            state="readonly"
         )
         self.role.pack(
             pady=5,
@@ -146,6 +206,7 @@ class CandidateWindow:
         ).pack(side=tk.RIGHT, anchor='w')
 
     def find(self):
+        self.roles = self.role_manager.display()
         # janela principal.
         tk.Label(
             self.root,
@@ -154,14 +215,16 @@ class CandidateWindow:
         ).pack(pady=20)
         
         # frame para os campos de entrada.
+        self.role_options = [role['name'] for role in self.roles]
         tk.Label(
             self.root,
             text="Cargo",
             font=("Arial", 10)
         ).pack(anchor='w')
-        self.role = tk.Entry(
+        self.role = ttk.Combobox(
             self.root,
-            width=30
+            values=self.role_options,
+            state="readonly"
         )
         self.role.pack(
             pady=5,
@@ -220,7 +283,10 @@ class CandidateWindow:
         self.candidate_manager.create(
             self.name.get(),
             self.number.get(),
-            self.role.get()
+            self.role.get(),
+            self.photo.get(),
+            self.vice.get(),
+            self.vice_photo.get(),
         )
         messagebox.showinfo(
             "Candidato cadastrado",
@@ -257,8 +323,45 @@ class CandidateWindow:
             f"Nome: {self.candidate['name']}\n"
             f"Cargo: {self.candidate['role']}\n"
             f"Número: {self.candidate['number']}"
+            f"Vice: {self.candidate['vice']}"
         )
         self.root.destroy()
+
+    def toggle_vice_fields(self, event=None):
+        selected_role_name = self.role.get()
+        selected_role = next((role for role in self.roles if role['name'] == selected_role_name), None)
+
+        if selected_role and selected_role.get('vice', False):
+            self.vice_label.pack(anchor='w')
+            self.vice.pack(pady=5, anchor='w')
+            self.vice_photo_label.pack(anchor='w')
+            self.frame_vice_photo.pack(anchor='w')
+        else:
+            self.vice_label.pack_forget()
+            self.vice.pack_forget()
+            self.vice_photo_label.pack_forget()
+            self.frame_vice_photo.pack_forget()
+    
+    
+    def select_photo(self):
+        filepath = filedialog.askopenfilename(
+            parent=self.root,
+            title="Selecione a foto do candidato",
+            filetypes=(("Arquivos PNG", "*.png"), ("Todos os arquivos", "*.*"))
+        )
+        if filepath:
+            self.photo.delete(0, tk.END)
+            self.photo.insert(0, filepath)
+
+    def select_vice_photo(self):
+        filepath = filedialog.askopenfilename(
+            parent=self.root,
+            title="Selecione a foto do vice",
+            filetypes=(("Arquivos PNG", "*.png"), ("Todos os arquivos", "*.*"))
+        )
+        if filepath:
+            self.vice_photo.delete(0, tk.END)
+            self.vice_photo.insert(0, filepath)
 
     def cancel_button(self):
         self.root.destroy()

@@ -1,5 +1,5 @@
+from time import sleep
 import tkinter as tk
-from PIL import ImageTk, Image
 from candidate import CandidateManager
 from role import RoleManager
 from voter import VoterManager
@@ -42,10 +42,6 @@ class VoteWindow:
         self.number = ''
         self.name = ''
 
-        # carregando e convertendo a imagem.
-        #self.image = Image.open("./data/foto.png")
-        #self.image = ImageTk.PhotoImage(self.image)
-
         # configurando o binding de teclado.
         self.root.bind('<Key>', self.read_keyboard)
 
@@ -61,10 +57,6 @@ class VoteWindow:
             text=self.current_role['name'],
             font=("Arial", 40, "bold")
         ).pack()
-
-        # exibindo a imagem.
-        #self.label_image = tk.Label(self.root, image=self.image)
-        #self.label_image.pack()
 
         # container para os dígitos.
         self.digits_container = tk.Frame(self.root)
@@ -104,14 +96,38 @@ class VoteWindow:
             )
             label.pack(anchor='w', expand=True)
             self.digit_labels.append(label)
+
+        # container para as informações do candidato.
+        self.candidate_container = tk.Frame(self.root)
+        self.candidate_container.pack(fill='x', expand=True, anchor='w')
         
         # label para o nome do candidato.
         self.label_name = tk.Label(
-            self.root,
+            self.candidate_container,
             text="",
             font=("Arial", 28)
         )
-        self.label_name.pack(anchor='w', pady=20)
+        self.label_name.pack(side='left', anchor='w')
+
+
+        # container para as informações do vice.
+        self.vice_container = tk.Frame(self.root)
+        self.vice_container.pack(fill='x', expand=True, anchor='w')
+
+        self.label_vice_name = tk.Label(
+            self.vice_container,
+            text="",
+            font=("Arial", 28)
+        )
+        self.label_vice_name.pack(side='left', anchor='w')
+
+        self.photo_dir = tk.PhotoImage(file="")
+        self.photo = tk.Label(self.candidate_container, image=self.photo_dir)
+        self.photo.pack(side='right', anchor='e')
+
+        self.vice_photo_dir = tk.PhotoImage(file="")
+        self.vice_photo = tk.Label(self.vice_container, image=self.vice_photo_dir)
+        self.vice_photo.pack(side='right', anchor='e')
 
         # atualiza o destaque do dígito atual.
         self.highlight_current_digit()
@@ -181,8 +197,23 @@ class VoteWindow:
             self.label_name.config(
                     text=""
             )
-            self.update_display()
 
+            # exibe a foto do candidato na tela.
+            self.photo_dir = tk.PhotoImage(file=f'')
+            self.photo.config(image=self.photo_dir)
+
+            if self.current_role['vice']:
+                self.label_vice_name.config(
+                    text="",
+                    fg="black"
+                )
+
+                # exibe a foto do vice na tela.
+                self.vice_photo_dir = tk.PhotoImage(file=f'')
+                self.vice_photo.config(image=self.photo_dir)
+                
+            self.update_display()
+        
     def update_display(self):
          # atualiza os dígitos nos quadrados.
         for i in range(len(self.digit_labels)):
@@ -206,13 +237,26 @@ class VoteWindow:
             candidate = self.candidate_manager.find(self.current_role['name'], self.number)
             
             if candidate:
+                # exibe o nome do candidato na tela.
                 self.label_name.config(
                     text=f"Nome: {candidate['name']}",
                     fg="black"
                 )
-                # atualiza imagem do candidato.
-                #self.image = Image.open(f"./data/candidates/{candidate['image']}")
-                #self.image = ImageTk.PhotoImage(self.image)
+
+                # exibe a foto do candidato na tela.
+                self.photo_dir = tk.PhotoImage(file=f'./data/images/{candidate['cand_id']}.png')
+                self.photo.config(image=self.photo_dir)
+
+                if self.current_role['vice']:
+                    # exibe o nome do vice na tela.
+                    self.label_vice_name.config(
+                        text=f"Vice-{self.current_role['name']}: {candidate['vice']}",
+                        fg="black"
+                    )
+
+                    # exibe a foto do vice na tela.
+                    self.vice_photo_dir = tk.PhotoImage(file=f'./data/images/{candidate['cand_id']}.vice.png')
+                    self.vice_photo.config(image=self.vice_photo_dir)
             else:
                 self.label_name.config(
                     text="VOTO NULO!"
