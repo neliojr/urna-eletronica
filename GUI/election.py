@@ -64,6 +64,7 @@ class ElectionWindow:
             self.voter_manager = VoterManager()
             vote_window = tk.Toplevel(self.root)
             VoteWindow(vote_window, self.voter_id.get())
+            self.voter_id.delete(0, tk.END)
         else:
             messagebox.showerror(
                 "Eleitor votou",
