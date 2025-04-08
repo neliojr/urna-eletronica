@@ -187,13 +187,12 @@ class VoteWindow:
                 self.number += self.key
                 
                 # Atualiza a exibição na tela
-                self.update_display()
+                self.update_display(False)
                 
             # Se a tecla for Backspace, limpa o número
             elif event.keysym == 'BackSpace':
                 if len(self.number) > 0:
-                    self.number = ''
-                    self.update_display()
+                    self.update_display(True)
         
         # Se todos os dígitos estiverem preenchidos
         elif event.keysym == 'Return':
@@ -201,8 +200,14 @@ class VoteWindow:
             self.confirm_vote()
         
         elif event.keysym == 'BackSpace':
+            self.update_display(True)  # Atualiza a tela
+        
+    # Método para atualizar a exibição na tela
+    def update_display(self, backspace):
+        if backspace:
             # Reinicia o voto ao pressionar Backspace
             self.number = ''
+
             self.label_number_text.config(fg="#d9d9d9")  # Esconde o rótulo "Número"
             self.label_name.config(text="")  # Remove o nome do candidato
             self.photo_dir = tk.PhotoImage(file='')  # Remove a foto do candidato
@@ -213,10 +218,6 @@ class VoteWindow:
                 self.vice_photo_dir = tk.PhotoImage(file='')  # Remove a foto do vice
                 self.vice_photo.config(image=self.photo_dir)
                 
-            self.update_display()  # Atualiza a tela
-        
-    # Método para atualizar a exibição na tela
-    def update_display(self):
         # Atualiza os dígitos exibidos nos quadrados
         for i in range(len(self.digit_labels)):
             if i < len(self.number):
