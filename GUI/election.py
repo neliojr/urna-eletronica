@@ -222,6 +222,7 @@ class ElectionWindow:
             "***************************************",
             f"*{name.upper().center(37)}*",
             "***************************************",
+            "",
             f"Data {formatted_date.rjust(34)}",
             f"Horário {formatted_time.rjust(31)}",
             f"Seção {str(section).zfill(4).rjust(33)}",
@@ -243,7 +244,7 @@ class ElectionWindow:
             bulletin.append(
                 "Nome do Candidato".ljust(25) + 
                 "Nº".center(5) + 
-                "Votos".rjust(8)
+                "Votos".rjust(9)
             )
             
             # Lista de candidatos e votos
@@ -255,17 +256,17 @@ class ElectionWindow:
                     bulletin.append(
                         f"  {candidate['name'][:22]}".ljust(25) +
                         f"{candidate['number']}".center(5) +
-                        votes_text.rjust(8)
+                        votes_text.rjust(9)
                     )
 
             # Totais para o cargo
             bulletin.extend([
                 "",
                 "-" * 39,
-                "Eleitores Aptos"+ f"{str(total_aptos).zfill(4).rjust(23)}",
-                f"Total Apurado" + f"{str(total_apurado).zfill(4).rjust(25)}",
-                f"Votos Nominais" + f"{str(roll_call_votes).zfill(4).rjust(24)}",
-                f"Brancos/Nulos" + f"{str(total_apurado - roll_call_votes).zfill(4).rjust(25)}",
+                f"Eleitores Aptos {str(total_aptos).zfill(4).rjust(23)}",
+                f"Total Apurado {str(total_apurado).zfill(4).rjust(25)}",
+                f"Votos Nominais {str(roll_call_votes).zfill(4).rjust(24)}",
+                f"Brancos/Nulos {str(total_apurado - roll_call_votes).zfill(4).rjust(25)}",
                 "",
                 "=" * 39
             ])

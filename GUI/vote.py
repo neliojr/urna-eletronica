@@ -238,7 +238,7 @@ class VoteWindow:
                 current_step += 1
                 progress['value'] = current_step
                 self.root.update()  # Força atualização da interface
-                self.root.after(500, save_next_vote)
+                self.root.after(200, save_next_vote)
             else:
                 self.show_end_screen()
 
