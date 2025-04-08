@@ -140,7 +140,7 @@ class ElectionWindow:
         """Processo de encerramento da eleição"""
         if self.voter_id.get() == self.config_manager.get()['admin_pass']:
             # Mostra boletim final se senha estiver correta
-            self.show_bulletin_window('Boletím de Urna')
+            self.show_bulletin_window('Boletim de Urna')
         else:
             # Mensagem de erro para senha incorreta
             messagebox.showerror(
@@ -164,7 +164,7 @@ class ElectionWindow:
         )
         texto_boletim.pack(padx=10, pady=5)
         # Insere conteúdo gerado no widget de texto
-        texto_boletim.insert(tk.INSERT, self.generate_bulletin())
+        texto_boletim.insert(tk.INSERT, self.generate_bulletin(name))
 
         # Botão para salvar em PDF
         botao_salvar = ttk.Button(
@@ -174,7 +174,7 @@ class ElectionWindow:
         )
         botao_salvar.pack(pady=10)
 
-    def generate_bulletin(self):
+    def generate_bulletin(self, name):
         """Gera o conteúdo textual do boletim de urna"""
         # Recarrega gerenciadores para garantir dados atualizados
         self.role_manager = RoleManager()
@@ -201,15 +201,15 @@ class ElectionWindow:
         # Cabeçalho do boletim
         bulletin = [
             "***************************************",
-            "*       BOLETIM DE URNA ELETRÔNICA    *".center(39),
+            f"*{name.upper().center(37)}*",
             "***************************************",
-            f"Data: {formatted_date}",
-            f"Horário: {formatted_time}",
-            f"Seção: {section}",
+            f"Data {formatted_date.rjust(34)}",
+            f"Horário {formatted_time.rjust(31)}",
+            f"Seção {str(section).zfill(4).rjust(33)}",
             "",
-            f"Eleitores Aptos: {total_aptos}",
-            f"Comparecimento: {total_apurado}",
-            f"Eleitores faltosos: {faltosos}",
+            f"Eleitores Aptos {str(total_aptos).zfill(4).rjust(23)}",
+            f"Comparecimento {str(total_apurado).zfill(4).rjust(24)}",
+            f"Eleitores faltosos {str(faltosos).zfill(4).rjust(20)}",
             "",
             "=" * 39
         ]
@@ -217,14 +217,14 @@ class ElectionWindow:
         # Seções por cargo político
         for role in roles:
             # Título do cargo
-            role_title = f" {role['name'].upper()} ".center(37, "-")
-            bulletin.extend(["", role_title, ""])
+            role_title = f"{role['name'].upper()}".center(39, "-")
+            bulletin.extend(["", role_title])
             
             # Cabeçalho da tabela
             bulletin.append(
                 "Nome do Candidato".ljust(25) + 
                 "Nº".center(5) + 
-                "Votos".rjust(9)
+                "Votos".rjust(8)
             )
             
             # Lista de candidatos e votos
@@ -232,20 +232,22 @@ class ElectionWindow:
             for candidate in candidates:
                 if candidate['role'] == role['name']:
                     roll_call_votes += candidate['votes']
-                    votes_text = str(candidate['votes']) + (" voto" if candidate['votes'] == 1 else " votos")
+                    votes_text = str(candidate['votes']).zfill(4)
                     bulletin.append(
-                        f"  {candidate['name']}".ljust(25) +
+                        f"  {candidate['name'][:22]}".ljust(25) +
                         f"{candidate['number']}".center(5) +
-                        votes_text.rjust(9)
+                        votes_text.rjust(8)
                     )
 
             # Totais para o cargo
             bulletin.extend([
                 "",
-                f"Eleitores Aptos: {total_aptos}",
-                f"Total Apurado: {total_apurado}",
-                f"Votos Nominais: {roll_call_votes}",
-                f"Brancos/Nulos: {total_apurado - roll_call_votes}",
+                "-" * 39,
+                "Eleitores Aptos"+ f"{str(total_aptos).zfill(4).rjust(23)}",
+                f"Total Apurado" + f"{str(total_apurado).zfill(4).rjust(25)}",
+                f"Votos Nominais" + f"{str(roll_call_votes).zfill(4).rjust(24)}",
+                f"Brancos/Nulos" + f"{str(total_apurado - roll_call_votes).zfill(4).rjust(25)}",
+                "",
                 "=" * 39
             ])
 
@@ -263,7 +265,7 @@ class ElectionWindow:
         """Salva o boletim em arquivo PDF"""
         pdf = FPDF()
         pdf.add_page()
-        pdf.set_font("Arial", size=12)
+        pdf.set_font("Courier", size=12)
         pdf.multi_cell(0, 10, conteudo)
         
         # Gera nome do arquivo com timestamp
