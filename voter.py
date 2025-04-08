@@ -22,7 +22,7 @@ class VoterManager:
         # Inicializa a lista de eleitores em memória
         self.voters = []
         # Define o caminho do arquivo de banco de dados JSON
-        self.database = './data/voters.json'
+        self.database = f'{config.get()['data_dir']}/voters.json'
         # Carrega os eleitores do arquivo para a memória
         self.load()
 

@@ -1,5 +1,9 @@
 # Importação necessária para manipulação de arquivos JSON
 import json
+from config import ConfigManager  # Para acessar configurações do sistema
+
+# Inicializa o gerenciador de configurações
+config = ConfigManager()
 
 # Classe que representa um cargo político no sistema
 class Role:
@@ -15,7 +19,7 @@ class RoleManager:
         # Inicializa a lista de cargos em memória
         self.roles = []
         # Define o caminho do arquivo de banco de dados JSON
-        self.database = './data/roles.json'
+        self.database = f'{config.get()['data_dir']}/roles.json'
         # Carrega os cargos do arquivo para a memória
         self.load()
 

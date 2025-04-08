@@ -3,6 +3,10 @@ import os          # Para operações com arquivos e diretórios
 import json        # Para manipulação de arquivos JSON
 import uuid        # Para geração de IDs únicos
 from PIL import Image  # Para processamento de imagens (redimensionamento)
+from config import ConfigManager  # Para acessar configurações do sistema
+
+# Inicializa o gerenciador de configurações
+config = ConfigManager()
 
 # Classe que representa um candidato no sistema
 class Candidate:
@@ -21,7 +25,7 @@ class CandidateManager:
         # Inicializa a lista de candidatos em memória
         self.candidates = []
         # Define o caminho do arquivo de banco de dados JSON
-        self.database = './data/candidates.json'
+        self.database = f'{config.get()['data_dir']}/candidates.json'
         # Carrega os candidatos do arquivo para a memória
         self.load()
 

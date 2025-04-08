@@ -14,7 +14,9 @@ class ConfigManager:
     def __init__(self):
         self.version = '1.0'  # Versão do gerenciador de configurações
         self.config = []  # Lista para armazenar objetos Config
-        self.database = './data/config.json'  # Caminho do arquivo JSON de configurações
+        self.user_dir = os.path.expanduser('~')
+        self.data_dir = f'{self.user_dir}/.urnadata'
+        self.database = f'{self.data_dir}/config.json'  # Caminho do arquivo JSON de configurações
         self.load()  # Carrega as configurações ao inicializar
 
     # Método para carregar as configurações do arquivo JSON para a memória
@@ -36,11 +38,11 @@ class ConfigManager:
                     self.config.append(config)  # Adiciona o objeto à lista
         except:  # Caso o arquivo não exista ou haja erro
             # Cria o diretório './data' se não existir
-            if not os.path.exists('./data'):
-                os.mkdir('./data')
+            if not os.path.exists(f'{self.data_dir}'):
+                os.mkdir(f'{self.data_dir}')
             # Cria o diretório './data/images' se não existir
-            if not os.path.exists('./data/images'):
-                os.mkdir('./data/images')
+            if not os.path.exists(f'{self.data_dir}/images'):
+                os.mkdir(f'{self.data_dir}/images')
             # Define configurações padrão
             data = {
                 "config": [
@@ -62,6 +64,7 @@ class ConfigManager:
         # Itera sobre a lista de configurações (assume apenas um item por simplicidade)
         for config in self.config:
             return {
+                'data_dir': self.data_dir,
                 'section': config.section,
                 'enable_gui': config.enable_gui,
                 'admin_pass': config.admin_pass,
