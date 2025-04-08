@@ -1,5 +1,6 @@
 import json  # Importa o módulo json para manipulação de arquivos JSON
 import os  # Importa o módulo os para manipulação de arquivos e diretórios
+import gdown
 
 # Classe que representa uma configuração
 class Config:
@@ -14,9 +15,9 @@ class ConfigManager:
     def __init__(self):
         self.version = '1.0'  # Versão do gerenciador de configurações
         self.config = []  # Lista para armazenar objetos Config
-        self.user_dir = os.path.expanduser('~')
-        self.data_dir = f'{self.user_dir}/.urnadata'
-        self.database = f'{self.data_dir}/config.json'  # Caminho do arquivo JSON de configurações
+        self.user_dir = os.path.expanduser('~') # Obtém o diretório do usuário
+        self.data_dir = f'{self.user_dir}/.urnadata' # Diretório onde os dados serão armazenados
+        self.database = f'{self.data_dir}/config.json' # Caminho do arquivo JSON de configurações
         self.load()  # Carrega as configurações ao inicializar
 
     # Método para carregar as configurações do arquivo JSON para a memória
@@ -40,9 +41,26 @@ class ConfigManager:
             # Cria o diretório './data' se não existir
             if not os.path.exists(f'{self.data_dir}'):
                 os.mkdir(f'{self.data_dir}')
+            
             # Cria o diretório './data/images' se não existir
             if not os.path.exists(f'{self.data_dir}/images'):
                 os.mkdir(f'{self.data_dir}/images')
+            
+            # Cria o diretório './data/sounds' e baixa os sons se não existirem
+            if not os.path.exists(f'{self.data_dir}/sounds'):
+                os.mkdir(f'{self.data_dir}/sounds')
+                gdown.download(
+                    'https://drive.google.com/uc?id=1ojuJCuz354-1YBt04Isu3DXH7ivOZ3V9',
+                    f'{self.data_dir}/sounds/end.wav',
+                    quiet=False
+                )
+
+                gdown.download(
+                    'https://drive.google.com/uc?id=1fzay61HupLIgbVZo9v51zsF9aewNhTyG',
+                    f'{self.data_dir}/sounds/confirmed_vote.wav',
+                    quiet=False
+                )
+
             # Define configurações padrão
             data = {
                 "config": [

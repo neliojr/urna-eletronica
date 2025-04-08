@@ -112,7 +112,7 @@ class CandidateManager:
             img_resized = img.resize((225, 300))
 
             # Salva a imagem redimensionada no diretório de imagens
-            img_resized.save(f'./data/images/{cand_id}.png')
+            img_resized.save(f'{config.get()['data_dir']}/images/{cand_id}.png')
 
             # Processamento da foto do vice-candidato (se fornecida)
             if vice_photo != '':  # Verifica se foi fornecida foto do vice
@@ -121,7 +121,7 @@ class CandidateManager:
                 img_resized = img.resize((150, 200))
                 
                 # Salva a imagem do vice com extensão especial (.vice.png)
-                img_resized.save(f'./data/images/{cand_id}.vice.png')
+                img_resized.save(f'{config.get()['data_dir']}/images/{cand_id}.vice.png')
         except:
             pass  # Se houver erro no processamento das imagens, ignora
         
@@ -145,9 +145,9 @@ class CandidateManager:
         candidate = self.find(role, number)
         try:
             # Remove a foto principal do candidato
-            os.remove(f'./data/images/{candidate['cand_id']}.png')
+            os.remove(f'{config.get()['data_dir']}/images/{candidate['cand_id']}.png')
             # Remove a foto do vice (se existir)
-            os.remove(f'./data/images/{candidate['cand_id']}.vice.png')
+            os.remove(f'{config.get()['data_dir']}/images/{candidate['cand_id']}.vice.png')
         except:
             pass  # Se não encontrar as imagens, continua normalmente
 

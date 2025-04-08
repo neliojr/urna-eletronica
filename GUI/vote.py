@@ -3,11 +3,13 @@ import tkinter as tk  # Importa Tkinter para criar interfaces gráficas
 from candidate import CandidateManager  # Importa gerenciador de candidatos
 from role import RoleManager  # Importa gerenciador de cargos
 from voter import VoterManager  # Importa gerenciador de eleitores
+from config import ConfigManager  # Para acessar configurações do sistema
 import pygame  # Importa Pygame para reprodução de sons
 
 class VoteWindow:
     # Método construtor da classe
     def __init__(self, root, voter_id):
+        self.config_manager = ConfigManager()  # Instancia o gerenciador de cargos
         self.role_manager = RoleManager()  # Instancia o gerenciador de cargos
         self.candidate_manager = CandidateManager()  # Instancia o gerenciador de candidatos
         self.voter_manager = VoterManager()  # Instancia o gerenciador de eleitores
@@ -126,7 +128,7 @@ class VoteWindow:
         )
         self.label_vice_name.pack(side='left', anchor='w')
 
-        # Imagem inicial vaz她的ia para o candidato
+        # Imagem inicial vazia para o candidato
         self.photo_dir = tk.PhotoImage(file="")
         self.photo = tk.Label(self.candidate_container, image=self.photo_dir)
         self.photo.pack(side='right', anchor='e')  # Alinhado à direita
@@ -246,7 +248,7 @@ class VoteWindow:
                     fg="black"
                 )
                 # Carrega e exibe a foto do candidato
-                self.photo_dir = tk.PhotoImage(file=f'./data/images/{candidate['cand_id']}.png')
+                self.photo_dir = tk.PhotoImage(file=f'{self.config_manager.get()['data_dir']}/images/{candidate['cand_id']}.png')
                 self.photo.config(image=self.photo_dir)
 
                 if self.current_role['vice']:
@@ -256,7 +258,7 @@ class VoteWindow:
                         fg="black"
                     )
                     # Carrega e exibe a foto do vice
-                    self.vice_photo_dir = tk.PhotoImage(file=f'./data/images/{candidate['cand_id']}.vice.png')
+                    self.vice_photo_dir = tk.PhotoImage(file=f'{self.config_manager.get()['data_dir']}/images/{candidate['cand_id']}.vice.png')
                     self.vice_photo.config(image=self.vice_photo_dir)
             else:
                 # Caso não encontre candidato, exibe "VOTO NULO"
@@ -291,14 +293,14 @@ class VoteWindow:
             if self.current_round <= self.total_rounds:
                 # Reproduz som de confirmação
                 pygame.mixer.init()
-                pygame.mixer.Sound("./data/sounds/confirmed_vote.wav").play()
+                pygame.mixer.Sound(f"{self.config_manager.get()['data_dir']}/sounds/confirmed_vote.wav").play()
                 # Inicia a próxima rodada de votação
                 self.start_vote_for_current_round()
             else:
                 self.voted = True  # Marca como votado
                 # Reproduz som de finalização
                 pygame.mixer.init()
-                pygame.mixer.Sound("./data/sounds/end.wav").play()
+                pygame.mixer.Sound(f"{self.config_manager.get()['data_dir']}/sounds/end.wav").play()
                 
                 # Limpa a tela
                 for widget in self.root.winfo_children():
