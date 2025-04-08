@@ -19,6 +19,8 @@ class ElectionWindow:
         self.voter_manager = VoterManager()  # Gerencia eleitores
         self.config_manager = ConfigManager()  # Gerencia configurações do sistema
 
+        self.waiting_voter = False # Indica se tem eleitor votando
+
         # Configuração da janela principal
         self.root = root
         self.root.withdraw()  # Esconde a janela inicialmente
@@ -113,22 +115,39 @@ class ElectionWindow:
 
     def validate_button(self):
         """Valida o eleitor e inicia o processo de votação"""
-        validate = self.voter_manager.validate(self.voter_id.get())
+        voter_id = self.voter_id.get()
+        validate = self.voter_manager.validate(voter_id)
 
-        if validate and int(self.voter_manager.find(self.voter_id.get())['section']) == int(self.config_manager.get()['section']):
-            # Marca eleitor como votado
-            self.voter_manager.voter_voted(self.voter_id.get())
-            # Atualiza contador no menu
+        if self.waiting_voter:
+            # Mostra mensagem de erro se eleitor inválido
+            messagebox.showerror(
+                "Eleitor votando",
+                "Já tem um eleitor votando, aguarde o eleitor votar."
+            )
+
+            return
+
+        if validate and int(self.voter_manager.find(voter_id)['section']) == int(self.config_manager.get()['section']):
+            # Marca como tem um eleitor votando
+            self.waiting_voter = True
+
+            # Abre janela de votação
+            vote_window = tk.Toplevel(self.root)
+            VoteWindow(vote_window, voter_id)
+            
+            # Limpa campo de ID imediatamente
+            self.voter_id.delete(0, tk.END)
+
+            # Aguarda a janela de votação fechar e atualiza o contador
+            self.root.wait_window(vote_window)  # Espera a janela de votação ser destruída
+
+            self.voter_manager = VoterManager()
+            
+            # Atualiza o contador no menu após o voto
             self.menu_bar.entryconfigure(1, 
                 label=f"{self.voter_manager.count_voted()}/{self.voter_manager.count_by_section(str(self.config_manager.get()['section']))}")
             
-            # Recarrega gerenciador de eleitores
-            self.voter_manager = VoterManager()
-            # Abre janela de votação
-            vote_window = tk.Toplevel(self.root)
-            VoteWindow(vote_window, self.voter_id.get())
-            # Limpa campo de ID
-            self.voter_id.delete(0, tk.END)
+            self.waiting_voter = False
         else:
             # Mostra mensagem de erro se eleitor inválido
             messagebox.showerror(
