@@ -43,9 +43,9 @@ Se preferir rodar o projeto a partir do código Python:
    git clone https://github.com/neliojr/urna-eletronica.git
    cd urna-eletronica
    ```
-2. Instale as dependências (se houver):
+2. Instale as dependências:
    ```bash
-   pip install -r requirements.txt
+   pip install tkcalendar gdown fpdf pygame
    ```
 3. Execute:
    ```bash
