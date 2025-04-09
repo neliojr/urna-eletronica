@@ -23,21 +23,6 @@ class ConfigManager:
     # Método para carregar as configurações do arquivo JSON para a memória
     def load(self):
         try:
-            # Tenta abrir e ler o arquivo de configurações
-            with open(self.database, 'r') as file:
-                data = json.load(file)  # Carrega os dados do JSON
-
-                # Itera sobre os itens na seção "config" do JSON
-                for item in data['config']:
-                    # Cria um objeto Config com os dados do item
-                    config = Config(
-                        item['section'],
-                        item['enable_gui'],
-                        item['admin_pass'],
-                        item['voter_number_digit_length']
-                    )
-                    self.config.append(config)  # Adiciona o objeto à lista
-        except:  # Caso o arquivo não exista ou haja erro
             # Cria o diretório './data' se não existir
             if not os.path.exists(f'{self.data_dir}'):
                 os.mkdir(f'{self.data_dir}')
@@ -60,6 +45,23 @@ class ConfigManager:
                     f'{self.data_dir}/sounds/confirmed_vote.wav',
                     quiet=False
                 )
+
+            # Tenta abrir e ler o arquivo de configurações
+            with open(self.database, 'r') as file:
+                data = json.load(file)  # Carrega os dados do JSON
+
+                # Itera sobre os itens na seção "config" do JSON
+                for item in data['config']:
+                    # Cria um objeto Config com os dados do item
+                    config = Config(
+                        item['section'],
+                        item['enable_gui'],
+                        item['admin_pass'],
+                        item['voter_number_digit_length']
+                    )
+                    self.config.append(config)  # Adiciona o objeto à lista
+        except:
+            return 'Erro desconhecido'
 
             # Define configurações padrão
             data = {
