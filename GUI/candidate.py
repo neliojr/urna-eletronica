@@ -377,7 +377,8 @@ class CandidateWindow:
         # Exibe mensagem de sucesso
         messagebox.showinfo(
             "Candidato cadastrado",
-            "O candidato foi cadastrado com sucesso!"
+            "O candidato foi cadastrado com sucesso!",
+            parent=self.root
         )
         self.root.destroy()  # Fecha a janela
 
@@ -390,7 +391,8 @@ class CandidateWindow:
         # Exibe mensagem de sucesso
         messagebox.showinfo(
             "Candidato removido",
-            "O candidato foi removido com sucesso!"
+            "O candidato foi removido com sucesso!",
+            parent=self.root
         )
         self.root.destroy()  # Fecha a janela
 
@@ -405,7 +407,8 @@ class CandidateWindow:
         if self.candidate is None:
             messagebox.showerror(
                 "Erro",
-                "Candidato não encontrado."
+                "Candidato não encontrado.",
+                parent=self.root
             )
             return
         
@@ -414,8 +417,9 @@ class CandidateWindow:
             "Dados do candidato",
             f"Nome: {self.candidate['name']}\n"
             f"Cargo: {self.candidate['role']}\n"
-            f"Número: {self.candidate['number']}"
-            f"Vice: {self.candidate['vice']}"
+            f"Número: {self.candidate['number']}\n"
+            f"Vice: {self.candidate['vice']}",
+            parent=self.root
         )
         self.root.destroy()  # Fecha a janela
 

@@ -122,7 +122,8 @@ class ElectionWindow:
             # Mostra mensagem de erro se eleitor inválido
             messagebox.showerror(
                 "Eleitor votando",
-                "Já tem um eleitor votando, aguarde o eleitor votar."
+                "Já tem um eleitor votando, aguarde o eleitor votar.",
+                parent=self.root
             )
 
             return
@@ -152,7 +153,8 @@ class ElectionWindow:
             # Mostra mensagem de erro se eleitor inválido
             messagebox.showerror(
                 "Eleitor votou",
-                "O eleitor informado já votou ou não está cadastrado!"
+                "O eleitor informado já votou ou não está cadastrado!",
+                parent=self.root
             )
 
     def end_election(self):
@@ -164,7 +166,8 @@ class ElectionWindow:
             # Mensagem de erro para senha incorreta
             messagebox.showerror(
                 "Senha inválida",
-                "A senha do administrador está incorreta."
+                "A senha do administrador está incorreta.",
+                parent=self.root
             )
 
     def get_bulletin(self, name, window):
@@ -291,7 +294,11 @@ class ElectionWindow:
         # Gera nome do arquivo com timestamp
         nome_arquivo = f"{name.lower()}{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf"
         pdf.output(nome_arquivo)
-        messagebox.showinfo("Sucesso", f"PDF salvo como: {nome_arquivo}")
+        messagebox.showinfo(
+            "Sucesso",
+            f"PDF salvo como: {nome_arquivo}",
+            parent=self.root
+        )
 
     def cancel_button(self):
         """Fecha a aplicação"""

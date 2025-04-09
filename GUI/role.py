@@ -267,7 +267,8 @@ class RoleWindow:
         # Exibe mensagem de sucesso
         messagebox.showinfo(
             "Cargo cadastrado",
-            "O cargo foi criado com sucesso!"
+            "O cargo foi criado com sucesso!",
+            parent=self.root
         )
 
         self.root.destroy()  # Fecha a janela
@@ -279,7 +280,8 @@ class RoleWindow:
         )
         messagebox.showinfo(
             "cargo removido",
-            "O cargo foi removido com sucesso!"
+            "O cargo foi removido com sucesso!",
+            parent=self.root
         )
 
         self.root.destroy()  # Fecha a janela
@@ -294,7 +296,8 @@ class RoleWindow:
         if self.role is None:
             messagebox.showerror(
                 "Erro",
-                "Cargo não encontrado."
+                "Cargo não encontrado.",
+                parent=self.root
             )
             return
 
@@ -309,7 +312,8 @@ class RoleWindow:
             "Dados do cargo",
             f"Nome: {self.role['name']}\n"
             f"Dígitos: {self.role['digits']}\n"
-            f"Tem vice? {self.role['vice']}"
+            f"Tem vice? {self.role['vice']}",
+            parent=self.root
         )
         self.root.destroy()  # Fecha a janela
 

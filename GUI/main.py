@@ -241,7 +241,11 @@ class Application:
     def change_to_tui(self):
         """Alterna para interface de texto (TUI)"""
         self.config.change_ui()  # Altera configuração
-        messagebox.showinfo("Configurações", "Inicie o aplicativo novamente para aplicar as mudanças.")
+        messagebox.showinfo(
+            "Configurações",
+            "Inicie o aplicativo novamente para aplicar as mudanças.",
+            parent=self.root
+        )
         self.root.destroy()  # Fecha a aplicação
     
     def change_password_window(self):
@@ -350,7 +354,7 @@ class Application:
         tk.Button(
             button_frame,
             text="Alterar Seção",
-            command=lambda: self.change_section_button(new_section.get())
+            command=lambda: self.change_section_button(new_section.get(), section_window)
         ).pack(side=tk.LEFT, padx=10)
         
         # Botão para cancelar
@@ -360,9 +364,13 @@ class Application:
             command=section_window.destroy
         ).pack(side=tk.RIGHT, padx=10)
     
-    def change_section_button(self, new_section):
+    def change_section_button(self, new_section, window):
         self.config.change_section(new_section)
-        messagebox.showinfo("Seção alterada", "A seção foi alterada com sucesso!")
+        messagebox.showinfo(
+            "Seção alterada",
+            "A seção foi alterada com sucesso!",
+            parent=window
+        )
 
 
     def change_admin_password(self, current_pass, new_pass, confirm_pass, window):
@@ -371,29 +379,53 @@ class Application:
 
         # Validações básicas
         if not current_pass or not new_pass or not confirm_pass:
-            messagebox.showerror("Erro", "Todos os campos devem ser preenchidos!")
+            messagebox.showerror(
+                "Erro",
+                "Todos os campos devem ser preenchidos!",
+                parent=window
+            )
             return
         
         if new_pass != confirm_pass:
-            messagebox.showerror("Erro", "As novas senhas não coincidem!")
+            messagebox.showerror(
+                "Erro",
+                "As novas senhas não coincidem!",
+                parent=window
+            )
             return
         
         if len(new_pass) < 4:
-            messagebox.showerror("Erro", "A senha deve ter pelo menos 4 caracteres!")
+            messagebox.showerror(
+                "Erro",
+                "A senha deve ter pelo menos 4 caracteres!",
+                parent=window
+            )
             return
         
         # Verifica a senha atual (você precisará implementar isso no ConfigManager)
         if not self.verify_admin_password(current_pass):
-            messagebox.showerror("Erro", "Senha atual incorreta!")
+            messagebox.showerror(
+                "Erro",
+                "Senha atual incorreta!",
+                parent=window
+            )
             return
         
         # Tenta alterar a senha
         try:
             self.config.change_admin_pass(new_pass)
-            messagebox.showinfo("Sucesso", "Senha alterada com sucesso!")
+            messagebox.showinfo(
+                "Sucesso",
+                "Senha alterada com sucesso!",
+                parent=window
+            )
             window.destroy()
         except Exception as e:
-            messagebox.showerror("Erro", f"Falha ao alterar senha: {str(e)}")
+            messagebox.showerror(
+                "Erro",
+                f"Falha ao alterar senha: {str(e)}",
+                parent=window
+            )
     
     def verify_admin_password(self, password):
         """Verifica se a senha fornecida corresponde à senha atual"""
@@ -402,9 +434,17 @@ class Application:
     def update_program(self):
         """Verifica atualizações disponíveis"""
         if self.config.find_update():
-            messagebox.showinfo("Atualizações", "Seu aplicativo será atualizado.")
+            messagebox.showinfo(
+                "Atualizações",
+                "Seu aplicativo será atualizado.",
+                parent=self.root
+            )
         else:
-            messagebox.showinfo("Atualizações", "Seu aplicativo já está atualizado.")
+            messagebox.showinfo(
+                "Atualizações",
+                "Seu aplicativo já está atualizado.",
+                parent=self.root
+            )
 
     def delete_all_data(self):
         """Apaga todos os dados do sistema"""
@@ -412,6 +452,7 @@ class Application:
         messagebox.showinfo(
             "Configurações", 
             "Todos os dados foram apagados.\n"
-            "Inicie o aplicativo novamente para aplicar as mudanças."
+            "Inicie o aplicativo novamente para aplicar as mudanças.",
+            parent=self.root
         )
         self.root.destroy()  # Fecha a aplicação

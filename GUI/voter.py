@@ -269,7 +269,8 @@ class VoterWindow:
         # Exibe mensagem de sucesso
         messagebox.showinfo(
             "Eleitor cadastrado",
-            "O eleitor foi cadastrado com sucesso!"
+            "O eleitor foi cadastrado com sucesso!",
+            parent=self.root
         )
         self.root.destroy()  # Fecha a janela
 
@@ -282,7 +283,8 @@ class VoterWindow:
         # Exibe mensagem de sucesso
         messagebox.showinfo(
             "Eleitor removido",
-            "O eleitor foi removido com sucesso!"
+            "O eleitor foi removido com sucesso!",
+            parent=self.root
         )
         self.root.destroy()  # Fecha a janela
 
@@ -297,7 +299,8 @@ class VoterWindow:
         if self.voter is None:
             messagebox.showerror(
                 "Erro",
-                "Eleitor não encontrado."
+                "Eleitor não encontrado.",
+            parent=self.root
             )
             return
         
@@ -307,7 +310,8 @@ class VoterWindow:
             f"Nome: {self.voter['name']}\n"
             f"ID do eleitor: {self.voter['voter_id']}\n"
             f"Data de nascimento: {self.voter['date_of_birth']}\n"
-            f"Seção: {self.voter['section']}"
+            f"Seção: {self.voter['section']}",
+            parent=self.root
         )
         self.root.destroy()  # Fecha a janela
 
