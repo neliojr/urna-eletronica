@@ -20,11 +20,11 @@ Baixe a versão mais recente na seção de [Releases](https://github.com/neliojr
 1. Baixe o binário `urna-eletronica` da release.
 2. Dê permissão de execução:
    ```bash
-   chmod +x urna-eletronica-linux-x64
+   chmod +x urna-eletronica
    ```
 3. Execute:
    ```bash
-   ./urna-eletronica-linux-x64
+   ./urna-eletronica
    ```
 
 ### No Windows
