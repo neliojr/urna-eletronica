@@ -54,16 +54,14 @@ class VoterWindow:
             text="Data de nascimento",
             font=("Arial", 10)
         ).pack(anchor='w')  # Rótulo "Data de nascimento"
-        self.date_of_birth = tk.StringVar()  # Variável para armazenar a data selecionada
 
-        self.calendar = DateEntry(
+        self.date_of_birth = DateEntry(
             self.root,
             date_pattern='dd/mm/yyyy',  # Formato da data
             locale='pt_BR',  # Localização para português do Brasil
-            textvariable=self.date_of_birth,  # Vincula à variável
             maxdate=datetime.date.today()  # Limita a data máxima ao dia atual
         )
-        self.calendar.pack(pady=5)  # Exibe o calendário
+        self.date_of_birth.pack(pady=5)  # Exibe o calendário
 
         # Campo para entrada da seção eleitoral
         tk.Label(
@@ -260,10 +258,12 @@ class VoterWindow:
 
     # Método para processar o cadastro de um eleitor
     def create_voter_button(self):
+        date_of_birth = self.date_of_birth.get_date()
+        date_of_birth_formated = date_of_birth.strftime('%d/%m/%Y')
         # Chama o método create do VoterManager com os valores inseridos
         self.voter_manager.create(
             self.name.get(),  # Nome do eleitor
-            self.date_of_birth.get(),  # Data de nascimento
+            date_of_birth_formated,  # Data de nascimento
             self.section.get()  # Seção eleitoral
         )
         # Exibe mensagem de sucesso
