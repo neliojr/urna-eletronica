@@ -288,23 +288,80 @@ class CandidateWindow:
 
     def find_all(self):
         """Configura a interface para listagem geral de candidatos"""
-        # Título da tela (implementação básica)
+        # Limpa a janela principal
+        for widget in self.root.winfo_children():
+            widget.destroy()
+        
+        # Título da tela
         tk.Label(
             self.root,
-            text="Essa é a página de candidatos",
-            font=("Arial", 14)
-        ).pack(pady=20)
+            text="Lista de Todos os Candidatos",
+            font=("Arial", 14, "bold")
+        ).pack(pady=10)
         
-        # Frame para botões (implementação básica)
-        frame_buttons = tk.Frame(self.root)
-        frame_buttons.pack()
+        # Obtém todos os candidatos
+        all_candidates = self.candidate_manager.display()
+        
+        if not all_candidates:
+            tk.Label(
+                self.root,
+                text="Nenhum candidato cadastrado.",
+                font=("Arial", 10)
+            ).pack(pady=20)
+            return
+        
+        # Frame principal para a lista
+        list_frame = tk.Frame(self.root)
+        list_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
+        
+        # Treeview para exibir os candidatos em formato de tabela
+        columns = ("Cargo", "Número", "Nome", "Vice")
+        tree = ttk.Treeview(
+            list_frame,
+            columns=columns,
+            show="headings",
+            selectmode="browse"
+        )
 
-        # Botão de exemplo
+        # Configurações das colunas (largura personalizada para cada uma)
+        column_config = {
+            "Cargo": {"width": 150, "anchor": "w", "minwidth": 100},
+            "Número": {"width": 80, "anchor": "center", "minwidth": 60},
+            "Nome": {"width": 250, "anchor": "w", "minwidth": 150},
+            "Vice": {"width": 200, "anchor": "w", "minwidth": 100}
+        }
+        
+        # Configura as colunas
+        for col in columns:
+            tree.heading(col, text=col)
+            tree.column(col, **column_config[col]) # Aplica as configurações
+        
+        # Adiciona barra de rolagem
+        scrollbar = ttk.Scrollbar(list_frame, orient="vertical", command=tree.yview)
+        tree.configure(yscrollcommand=scrollbar.set)
+        scrollbar.pack(side="right", fill="y")
+        tree.pack(fill=tk.BOTH, expand=True)
+        
+        # Preenche a tabela com os candidatos
+        for candidate in all_candidates:
+            tree.insert("", "end", values=(
+                candidate['role'],
+                candidate['number'],
+                candidate['name'],
+                candidate.get('vice', 'N/A')  # Mostra 'N/A' se não tiver vice
+            ))
+        
+        # Frame para os botões
+        button_frame = tk.Frame(self.root)
+        button_frame.pack(pady=10)
+        
+        # Botão para fechar
         tk.Button(
-            frame_buttons,
-            text="Botão",
-            command=self.cancel_button
-        ).pack(side=tk.LEFT, padx=10)
+            button_frame,
+            text="Fechar",
+            command=self.root.destroy,
+            width=20
+        ).pack()
 
     # Métodos para ações dos botões
     def create_candidate_button(self):

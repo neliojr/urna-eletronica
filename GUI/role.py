@@ -175,20 +175,79 @@ class RoleWindow:
 
     # Método para criar a janela de listagem de todos os cargos
     def find_all(self):
+        """Configura a interface para listagem geral de cargos"""
+        # Limpa a janela principal
+        for widget in self.root.winfo_children():
+            widget.destroy()
+        
+        # Título da tela
         tk.Label(
             self.root,
-            text="Essa é a página de cargos",
-            font=("Arial", 14)
-        ).pack(pady=20)  # Título da janela
+            text="Lista de Todos os Cargos",
+            font=("Arial", 14, "bold")
+        ).pack(pady=10)
         
-        frame_buttons = tk.Frame(self.root)  # Frame para botões
-        frame_buttons.pack()
+        # Obtém todos os eleitores
+        all_roles = self.role_manager.display()
+        
+        if not all_roles:
+            tk.Label(
+                self.root,
+                text="Nenhum cargo cadastrado.",
+                font=("Arial", 10)
+            ).pack(pady=20)
+            return
+        
+        # Frame principal para a lista
+        list_frame = tk.Frame(self.root)
+        list_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
+        
+        # Treeview para exibir os candidatos em formato de tabela
+        columns = ("Nome", "Dígitos", "Vice")
+        tree = ttk.Treeview(
+            list_frame,
+            columns=columns,
+            show="headings",
+            selectmode="browse"
+        )
 
+        # Configurações das colunas (largura personalizada para cada uma)
+        column_config = {
+            "Nome": {"width": 150, "anchor": "w", "minwidth": 100},
+            "Dígitos": {"width": 75, "anchor": "center", "minwidth": 50},
+            "Vice": {"width": 75, "anchor": "center", "minwidth": 40}
+        }
+        
+        # Configura as colunas
+        for col in columns:
+            tree.heading(col, text=col)
+            tree.column(col, **column_config[col]) # Aplica as configurações
+        
+        # Adiciona barra de rolagem
+        scrollbar = ttk.Scrollbar(list_frame, orient="vertical", command=tree.yview)
+        tree.configure(yscrollcommand=scrollbar.set)
+        scrollbar.pack(side="right", fill="y")
+        tree.pack(fill=tk.BOTH, expand=True)
+        
+        # Preenche a tabela com os eleitores
+        for role in all_roles:
+            tree.insert("", "end", values=(
+                role['name'],
+                role['digits'],
+                "Sim" if role['vice'] else "Não"
+            ))
+        
+        # Frame para os botões
+        button_frame = tk.Frame(self.root)
+        button_frame.pack(pady=10)
+        
+        # Botão para fechar
         tk.Button(
-            frame_buttons,
-            text="Botão",
-            command=self.cancel_button  # Botão genérico (parece incompleto)
-        ).pack(side=tk.LEFT, padx=10)  # padx=10 adiciona espaçamento horizontal
+            button_frame,
+            text="Fechar",
+            command=self.root.destroy,
+            width=20
+        ).pack()
 
     # Método para processar a criação de um cargo
     def create_role_button(self):

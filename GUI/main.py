@@ -54,7 +54,8 @@ class Application:
             command=self.open_find_role_window  # Abre janela para buscar cargo
         )
         role_menu.add_command(
-            label="Listar"  # TODO: Implementar listagem de cargos
+            label="Listar",
+            command=self.open_find_all_role_window
         )
 
         # Menu "Candidatos" - Gerencia os candidatos
@@ -82,7 +83,8 @@ class Application:
             command=self.open_find_candidate_window
         )
         candidate_menu.add_command(
-            label="Listar"  # TODO: Implementar listagem de candidatos
+            label="Listar",
+            command=self.open_find_all_candidate_window
         )
 
         # Menu "Eleitores" - Gerencia os eleitores cadastrados
@@ -110,7 +112,8 @@ class Application:
             command=self.open_find_voter_window
         )
         voter_menu.add_command(
-            label="Listar"  # TODO: Implementar listagem de eleitores
+            label="Listar",
+            command=self.open_find_all_voter_window
         )
 
         # Menu "Configurações" - Opções do sistema
@@ -188,6 +191,11 @@ class Application:
         voter_window = tk.Toplevel(self.root)
         VoterWindow(voter_window, 'find')  # Modo busca
 
+    def open_find_all_voter_window(self):
+        """Abre janela para buscar todos os eleitores"""
+        voter_window = tk.Toplevel(self.root)
+        VoterWindow(voter_window, 'find_all')  # Modo buscar tudo
+
     def open_create_candidate_window(self):
         """Abre janela para cadastrar novo candidato"""
         candidate_window = tk.Toplevel(self.root)
@@ -203,20 +211,30 @@ class Application:
         candidate_window = tk.Toplevel(self.root)
         CandidateWindow(candidate_window, 'find')
 
+    def open_find_all_candidate_window(self):
+        """Abre janela para buscar todos os candidatos"""
+        candidate_window = tk.Toplevel(self.root)
+        CandidateWindow(candidate_window, 'find_all')
+
     def open_create_role_window(self):
-        """Abre janela para criar novo cargo político"""
+        """Abre janela para criar novo cargo"""
         role_window = tk.Toplevel(self.root)
         RoleWindow(role_window, 'create')
 
     def open_remove_role_window(self):
-        """Abre janela para remover cargo político"""
+        """Abre janela para remover cargo"""
         role_window = tk.Toplevel(self.root)
         RoleWindow(role_window, 'remove')
 
     def open_find_role_window(self):
-        """Abre janela para buscar cargo político"""
+        """Abre janela para buscar cargo """
         role_window = tk.Toplevel(self.root)
         RoleWindow(role_window, 'find')
+
+    def open_find_all_role_window(self):
+        """Abre janela para buscar todos os cargos"""
+        role_window = tk.Toplevel(self.root)
+        RoleWindow(role_window, 'find_all')
     
     def change_to_tui(self):
         """Alterna para interface de texto (TUI)"""

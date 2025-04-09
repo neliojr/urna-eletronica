@@ -1,6 +1,7 @@
 import datetime  # Importa módulo para manipulação de datas
 import tkinter as tk  # Importa Tkinter para criar interfaces gráficas
 from tkinter import messagebox  # Importa messagebox para exibir mensagens popup
+from tkinter import ttk
 from tkcalendar import DateEntry  # Importa DateEntry para campo de calendário
 
 from voter import VoterManager  # Importa a classe VoterManager do arquivo voter.py
@@ -181,23 +182,81 @@ class VoterWindow:
 
     # Método para criar a janela de listagem de todos os eleitores
     def find_all(self):
-        # Título da janela
+        """Configura a interface para listagem geral de eleitores"""
+        # Limpa a janela principal
+        for widget in self.root.winfo_children():
+            widget.destroy()
+        
+        # Título da tela
         tk.Label(
             self.root,
-            text="Essa é a página de eleitores",
-            font=("Arial", 14)
-        ).pack(pady=20)
+            text="Lista de Todos os Eleitoress",
+            font=("Arial", 14, "bold")
+        ).pack(pady=10)
         
-        # Frame para botões
-        frame_buttons = tk.Frame(self.root)
-        frame_buttons.pack()
+        # Obtém todos os eleitores
+        all_voters = self.voter_manager.display()
+        
+        if not all_voters:
+            tk.Label(
+                self.root,
+                text="Nenhum eleitor cadastrado.",
+                font=("Arial", 10)
+            ).pack(pady=20)
+            return
+        
+        # Frame principal para a lista
+        list_frame = tk.Frame(self.root)
+        list_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
+        
+        # Treeview para exibir os candidatos em formato de tabela
+        columns = ("ID", "Nome", "Data de nascimento", "Seção")
+        tree = ttk.Treeview(
+            list_frame,
+            columns=columns,
+            show="headings",
+            selectmode="browse"
+        )
 
-        # Botão genérico (parece incompleto)
+        # Configurações das colunas (largura personalizada para cada uma)
+        column_config = {
+            "ID": {"width": 150, "anchor": "center", "minwidth": 100},
+            "Nome": {"width": 250, "anchor": "w", "minwidth": 150},
+            "Data de nascimento": {"width": 200, "anchor": "center", "minwidth": 100},
+            "Seção": {"width": 40, "anchor": "center", "minwidth": 40}
+        }
+        
+        # Configura as colunas
+        for col in columns:
+            tree.heading(col, text=col)
+            tree.column(col, **column_config[col]) # Aplica as configurações
+        
+        # Adiciona barra de rolagem
+        scrollbar = ttk.Scrollbar(list_frame, orient="vertical", command=tree.yview)
+        tree.configure(yscrollcommand=scrollbar.set)
+        scrollbar.pack(side="right", fill="y")
+        tree.pack(fill=tk.BOTH, expand=True)
+        
+        # Preenche a tabela com os eleitores
+        for voter in all_voters:
+            tree.insert("", "end", values=(
+                voter['voter_id'],
+                voter['name'],
+                voter['date_of_birth'],
+                voter['section'],
+            ))
+        
+        # Frame para os botões
+        button_frame = tk.Frame(self.root)
+        button_frame.pack(pady=10)
+        
+        # Botão para fechar
         tk.Button(
-            frame_buttons,
-            text="Botão",
-            command=self.cancel_button  # Fecha a janela ao clicar
-        ).pack(side=tk.LEFT, padx=10)  # padx=10 adiciona espaçamento horizontal
+            button_frame,
+            text="Fechar",
+            command=self.root.destroy,
+            width=20
+        ).pack()
 
     # Método para processar o cadastro de um eleitor
     def create_voter_button(self):
