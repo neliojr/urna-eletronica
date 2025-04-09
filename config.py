@@ -61,8 +61,6 @@ class ConfigManager:
                     )
                     self.config.append(config)  # Adiciona o objeto à lista
         except:
-            return 'Erro desconhecido'
-
             # Define configurações padrão
             data = {
                 "config": [
@@ -98,7 +96,7 @@ class ConfigManager:
         data = {
             "config": [
                 {
-                    "section": self.config['section'],  # Erro: self.config é uma lista, não um dicionário
+                    "section": self.config['section'],
                     "enable_gui": self.config['enable_gui'],
                     "admin_pass": self.config['admin_pass'],
                     "voter_number_digit_length": self.config['voter_number_digit_length']
@@ -109,6 +107,20 @@ class ConfigManager:
         # Escreve os dados no arquivo JSON
         with open(self.database, 'w') as file:
             json.dump(data, file, indent=4)
+    
+    def change_admin_pass(self, new_password):
+        self.config = self.get()
+        self.config['admin_pass'] = new_password
+
+        self.save()
+
+        return
+    
+    def change_section(self, new_section):
+        self.config = self.get()
+        self.config['section'] = new_section
+
+        self.save()
 
     # Método para alternar o estado da interface gráfica
     def change_ui(self):

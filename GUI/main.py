@@ -129,13 +129,15 @@ class Application:
 
         # Itens do menu Configurações
         config_menu.add_command(
-            label="Alterar número da seção"  # TODO: Implementar alteração de seção
+            label="Alterar número da seção",
+            command=self.change_section_window
         )
         config_menu.add_command(
             label="Alterar número de dígitos do eleitor"  # TODO: Implementar
         )
         config_menu.add_command(
-            label="Alterar senha do administrador"  # TODO: Implementar
+            label="Alterar senha do administrador",
+            command=self.change_password_window
         )
         config_menu.add_command(
             label="Mudar para TUI",  # Alternar para interface textual
@@ -241,6 +243,161 @@ class Application:
         self.config.change_ui()  # Altera configuração
         messagebox.showinfo("Configurações", "Inicie o aplicativo novamente para aplicar as mudanças.")
         self.root.destroy()  # Fecha a aplicação
+    
+    def change_password_window(self):
+        """Abre janela para alterar a senha do administrador"""
+        password_window = tk.Toplevel(self.root)
+        password_window.title("Alterar Senha do Administrador")
+        password_window.geometry("400x200")
+        
+        # Frame principal
+        content = tk.Frame(password_window)
+        content.pack(pady=20)
+        
+        # Senha atual
+        tk.Label(
+            content,
+            text="Senha atual:",
+            font=("Arial", 10)
+        ).grid(row=0, column=0, sticky='e', padx=5, pady=5)
+        
+        current_password = tk.Entry(
+            content,
+            width=25,
+            show="*"  # Oculta a senha com asteriscos
+        )
+        current_password.grid(row=0, column=1, pady=5)
+        
+        # Nova senha
+        tk.Label(
+            content,
+            text="Nova senha:",
+            font=("Arial", 10)
+        ).grid(row=1, column=0, sticky='e', padx=5, pady=5)
+        
+        new_password = tk.Entry(
+            content,
+            width=25,
+            show="*"
+        )
+        new_password.grid(row=1, column=1, pady=5)
+        
+        # Confirmação da nova senha
+        tk.Label(
+            content,
+            text="Confirmar nova senha:",
+            font=("Arial", 10)
+        ).grid(row=2, column=0, sticky='e', padx=5, pady=5)
+        
+        confirm_password = tk.Entry(
+            content,
+            width=25,
+            show="*"
+        )
+        confirm_password.grid(row=2, column=1, pady=5)
+        
+        # Frame para os botões
+        button_frame = tk.Frame(password_window)
+        button_frame.pack(pady=10)
+        
+        # Botão para confirmar
+        tk.Button(
+            button_frame,
+            text="Alterar Senha",
+            command=lambda: self.change_admin_password(
+                current_password.get(),
+                new_password.get(),
+                confirm_password.get(),
+                password_window
+            )
+        ).pack(side=tk.LEFT, padx=10)
+        
+        # Botão para cancelar
+        tk.Button(
+            button_frame,
+            text="Cancelar",
+            command=password_window.destroy
+        ).pack(side=tk.RIGHT, padx=10)
+
+    def change_section_window(self):
+        """Abre janela para alterar a seção"""
+        section_window = tk.Toplevel(self.root)
+        section_window.title("Alterar Seção")
+        section_window.geometry("400x200")
+        
+        # Frame principal
+        content = tk.Frame(section_window)
+        content.pack(pady=20)
+        
+        # Nova seção
+        tk.Label(
+            content,
+            text="Nova seção",
+            font=("Arial", 10)
+        ).grid(row=1, column=0, sticky='e', padx=5, pady=5)
+        
+        new_section = tk.Entry(
+            content,
+            width=25
+        )
+        new_section.grid(row=1, column=1, pady=5)
+        
+        # Frame para os botões
+        button_frame = tk.Frame(section_window)
+        button_frame.pack(pady=10)
+        
+        # Botão para confirmar
+        tk.Button(
+            button_frame,
+            text="Alterar Seção",
+            command=lambda: self.change_section_button(new_section.get())
+        ).pack(side=tk.LEFT, padx=10)
+        
+        # Botão para cancelar
+        tk.Button(
+            button_frame,
+            text="Cancelar",
+            command=section_window.destroy
+        ).pack(side=tk.RIGHT, padx=10)
+    
+    def change_section_button(self, new_section):
+        self.config.change_section(new_section)
+        messagebox.showinfo("Seção alterada", "A seção foi alterada com sucesso!")
+
+
+    def change_admin_password(self, current_pass, new_pass, confirm_pass, window):
+        """Valida e altera a senha do administrador"""
+        self.config = ConfigManager()
+
+        # Validações básicas
+        if not current_pass or not new_pass or not confirm_pass:
+            messagebox.showerror("Erro", "Todos os campos devem ser preenchidos!")
+            return
+        
+        if new_pass != confirm_pass:
+            messagebox.showerror("Erro", "As novas senhas não coincidem!")
+            return
+        
+        if len(new_pass) < 4:
+            messagebox.showerror("Erro", "A senha deve ter pelo menos 4 caracteres!")
+            return
+        
+        # Verifica a senha atual (você precisará implementar isso no ConfigManager)
+        if not self.verify_admin_password(current_pass):
+            messagebox.showerror("Erro", "Senha atual incorreta!")
+            return
+        
+        # Tenta alterar a senha
+        try:
+            self.config.change_admin_pass(new_pass)
+            messagebox.showinfo("Sucesso", "Senha alterada com sucesso!")
+            window.destroy()
+        except Exception as e:
+            messagebox.showerror("Erro", f"Falha ao alterar senha: {str(e)}")
+    
+    def verify_admin_password(self, password):
+        """Verifica se a senha fornecida corresponde à senha atual"""
+        return self.config.get()['admin_pass'] == password
 
     def update_program(self):
         """Verifica atualizações disponíveis"""
